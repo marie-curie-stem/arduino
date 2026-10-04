@@ -45,7 +45,7 @@ Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RESET);
 // Adafruit_TFTLCD tft;
 
 void setup(void) {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println(F("TFT LCD test"));
 
 #ifdef USE_ADAFRUIT_SHIELD_PINOUT
