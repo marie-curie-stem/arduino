@@ -1,3 +1,6 @@
+// 2019-10-25 https://github.com/kreier/407B/blob/master/ultrasonic/ultrasonic_lcd2004_en.ino
+// 2026-10-05 https://github.com/marie-curie-stem/arduino/tree/main/examples/ultrasonic_lcd2004_en
+
 #include <Wire.h>
 #include <hd44780.h>
 #include <hd44780ioClass/hd44780_I2Cexp.h> // include i/o class header
@@ -16,11 +19,12 @@ int DistanceCm;
 unsigned long time; // runs over after 4294967295 milliseconds or 49days 17:02:47.295
 unsigned long runtime; // seconds this system actually runs
 int rollover = 0;
-int days = 0;
-int hours = 0;
+int days    = 0;
+int hours   = 0;
 int minutes = 0;
 int seconds = 0;
 char block = 255;
+uint32_t counter = 0;
 
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 
@@ -28,7 +32,7 @@ hd44780_I2Cexp lcd; // declare lcd object: auto locate & config display for hd44
 
 void setup()
 {
-  Serial.begin(57600);  // start serial to PC
+  Serial.begin(115200);  // start serial to PC
   Serial.println("Ultrasonic Distance Measurement");  
   pinMode(LED, OUTPUT); // for status LED
   pinMode(PROXIMITY, INPUT);
@@ -76,14 +80,17 @@ void distance() {
    lcd.print("Ping: ");
    lcd.print(DistanceIn);  // converts ping time to distance and writes to serial 
                            // (0 = outside set distance range, no ping echo)
-   lcd.print(" in ");
+   lcd.print(" in   ");
   
    //delay(100);  waits 100 milliseconds between pings. 29 milliseconds is the shortest delay between 2 pings
    DistanceCm = sonar.ping_cm(); // 10 pings per second
    lcd.setCursor(0,3);
    lcd.print("Ping: ");
    lcd.print(DistanceCm); 
-   lcd.print(" cm  ");    
+   lcd.print(" cm  ");
+   // counter += 1;
+   // if ((counter % 2) == 0) Serial.println(DistanceCm); // for less frequent ultrasonic values
+   Serial.println(DistanceCm);
 }
 
 void print2dig (int number) {
